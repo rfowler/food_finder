@@ -53,8 +53,8 @@ class Guide
     action = nil
 
     # Keep asking for input until get get something valid
-    until Guide::Config.actions.include?(action) if action
-      puts "Actions: " + Guide::Config.actions.join(", ")
+    until Guide::Config.actions.include?(action)
+      puts "Actions: " + Guide::Config.actions.join(", ") if action
       print "> "
       user_responce = gets.chomp
       action = user_responce.downcase.strip
@@ -65,15 +65,35 @@ class Guide
   def do_action(action)
     case action
       when 'list'
-        puts "Listing..."
+        list
       when 'find'
         puts "Finding..."
       when 'add'
-        puts "Adding..."
+        add
       when 'quit'
         return :quit
     end
 
+  end
+
+  def list
+    puts "\nRestaurant List\n\n"
+    restaurant = Restaurant.saved_restaurants
+    restaurant.each do |rest|
+      puts rest.name + " | " + rest.cuisine + " | " + rest.price + " | " + rest.distance + " | " + rest.rating
+    end
+  end
+
+  def add
+    puts "\nAdd a new restaurant\n\n"
+
+    restaurant = Restaurant.build_with_questions
+
+    if restaurant.save
+       puts "\nRestaurant Added\n\n"
+    else
+      puts "\nSave error: restaurant not added\n\n"
+    end
   end
 
   def conclusion
