@@ -32,4 +32,25 @@ module NumberHelper
     unit + integer + separator + precise_decimal
   end
 
+  def number_to_distance(dist, options={})
+    precision = options[:precision] || 2
+    separator = options[:separator] || '.'
+
+    separator = '' if precision == 0
+    integer, decimal = dist.to_s.split('.')
+
+    if precision == 0
+      precise_decimal = ''
+    else
+      # make sure decimal is not nil
+      decimal ||= "0"
+      # make sure the decimal is not too large
+      decimal = decimal[0, precision-1]
+      # make sure the decimal is not too short
+      precise_decimal = decimal.ljust(precision, "0")
+    end
+
+    integer + separator + precise_decimal
+  end
+
 end

@@ -92,4 +92,8 @@ class Restaurant
     number_to_currency(@price)
   end
 
+  def formatted_distance
+    number_to_distance(@distance)
+  end
+
 end
